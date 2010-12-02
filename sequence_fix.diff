@@ -1,0 +1,23 @@
+diff --git a/lib/log4r/outputter/rollingfileoutputter.rb b/lib/log4r/outputter/rollingfileoutputter.rb
+index d8ecf0c..dfe6e97 100644
+--- a/lib/log4r/outputter/rollingfileoutputter.rb
++++ b/lib/log4r/outputter/rollingfileoutputter.rb
+@@ -22,7 +22,8 @@ module Log4r
+   #     of this number (if any).  So, if max_backups is 10, then a maximum of 11 files will be maintained (the current
+   #     log, plus 10 backups). If max_backups is 0, no backups will be kept. If it is negative (the default),
+   #     there will be no limit on the number of files created. Note that the sequence numbers will continue to escalate;
+-  #     old sequence numbers are not reused.
++  #     old sequence numbers are not reused until the sequence number reaches its maximum of 999999,
++  #     at which time it will reset to 1.
+   # [<tt>:trunc</tt>]  If true, deletes ALL existing log files (based on :filename) upon initialization,
+   #     and the sequence numbering will start over at 000001. Otherwise continues logging where it left off
+   #     last time (i.e. either to the file with the highest sequence number, or a new file, as appropriate).
+@@ -192,6 +193,8 @@ module Log4r
+       # just overwrite the existing log file) 
+       if (@max_backups != 0)
+         @current_sequence_number += 1
++        # If we've reached our limit, roll back to 1
++        @current_sequence_number = 1 if @current_sequence_number = 999999
+         makeNewFilename
+       end
+       

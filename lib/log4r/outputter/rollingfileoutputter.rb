@@ -194,7 +194,7 @@ module Log4r
       if (@max_backups != 0)
         @current_sequence_number += 1
         # If we've reached our limit, roll back to 1
-        @current_sequence_number = 1 if @current_sequence_number = 999999
+        @current_sequence_number = 1 if @current_sequence_number == 999999
         makeNewFilename
       end
       
